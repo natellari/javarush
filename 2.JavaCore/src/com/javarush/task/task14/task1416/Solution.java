@@ -2,6 +2,8 @@ package com.javarush.task.task14.task1416;
 
 /* 
 Исправление ошибок
+
+Комментарий
 */
 
 public class Solution {
