@@ -33,9 +33,13 @@ public class Solution {
             String output = "output";
             //Add your code here
 
-            if (this.getClass().getSimpleName().equals("AgathaChristieBook"))
+/*            if (this.getClass().getSimpleName().equals("AgathaChristieBook"))
                 System.out.println(agathaChristieOutput);
             if (this.getClass().getSimpleName().equals("MarkTwainBook"))
+                System.out.println(markTwainOutput);*/
+            if (this.getBook() instanceof AgathaChristieBook)
+                System.out.println(agathaChristieOutput);
+            if (this.getBook() instanceof  MarkTwainBook)
                 System.out.println(markTwainOutput);
 
             return output;
@@ -47,17 +51,18 @@ public class Solution {
     }
 
     public static class MarkTwainBook extends Book{
-        private String title = "Tom Sawyer";
+        private String title;
 
         public MarkTwainBook(String author) {
             super("Mark Twain");
+            this.title = author;
         }
 
 
         //not works
         @Override
         public MarkTwainBook getBook() {
-            return getBook();
+            return this;
         }
 
         @Override
@@ -67,16 +72,17 @@ public class Solution {
     }
 
     public static class AgathaChristieBook extends Book{
-        private String title = "Hercule Poirot";
+        private String title;
 
         public AgathaChristieBook(String author) {
             super("Agatha Christie");
+            this.title = author;
         }
 
         //not works
         @Override
         public AgathaChristieBook getBook() {
-            return this.getBook();
+            return this;
         }
 
         @Override
