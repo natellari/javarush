@@ -33,6 +33,11 @@ public class Solution {
             String output = "output";
             //Add your code here
 
+            if (this.getClass().getSimpleName().equals("AgathaChristieBook"))
+                System.out.println(agathaChristieOutput);
+            if (this.getClass().getSimpleName().equals("MarkTwainBook"))
+                System.out.println(markTwainOutput);
+
             return output;
         }
 
