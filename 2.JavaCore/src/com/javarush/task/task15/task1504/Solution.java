@@ -37,10 +37,10 @@ public class Solution {
                 System.out.println(agathaChristieOutput);
             if (this.getClass().getSimpleName().equals("MarkTwainBook"))
                 System.out.println(markTwainOutput);*/
-            if (this.getBook() instanceof AgathaChristieBook)
-                System.out.println(agathaChristieOutput);
-            if (this.getBook() instanceof  MarkTwainBook)
-                System.out.println(markTwainOutput);
+            if (this instanceof AgathaChristieBook)
+                return agathaChristieOutput;
+            if (this instanceof  MarkTwainBook)
+                return markTwainOutput;
 
             return output;
         }
