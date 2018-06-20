@@ -7,7 +7,6 @@ import java.io.IOException;
 /* 
 Разные методы для разных типов
 
-Not work
 */
 
 public class Solution {
@@ -15,37 +14,33 @@ public class Solution {
         //напиште тут ваш код
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String exit = "exit";
-        double k0 = 0;
-        int k1 = 0;
 
-        do {
+        while (true) {
             String k = reader.readLine();
             if (k.equals(exit)) {
                 break;
             }
 
-            if (k.contains(".")) {
-
-                k0 = Double.parseDouble(k);
-                print(k0);
-            }
-        else{
             try {
-                k1 = Integer.parseInt(k);
-                if ((k1 > 0) && (k1 < 128)) {
-                    short k2 = Short.parseShort(String.valueOf((short) k1));
-                    print(k2);
+                if (k.contains(".")) {
+                    double k0 = Double.parseDouble(k);
+                    print(k0);
                 } else {
-                    print(k1);
+                    int k0 = Integer.parseInt(k);
+                    if ((k0 > 0) && (k0 < 128)) {
+                        short k1 = Short.parseShort(String.valueOf((short) k0));
+                        print(k1);
+                    } else {
+                        print(k0);
+                    }
                 }
             } catch (Exception e) {
                 print(k);
             }
-
         }
 
-    } while(true);
-}
+    }
+
 
     public static void print(Double value) {
         System.out.println("Это тип Double, значение " + value);
