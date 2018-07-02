@@ -42,9 +42,18 @@ public class Solution {
             seconds++;
             if (seconds == 60)
             {
-                this.seconds = 0;
-                this.minutes = 0;
-                this.hours = 0;
+                seconds = 0;
+                minutes = minutes++;
+                if (minutes == 60)
+                {
+                    minutes = 0;
+                    hours = hours++;
+                    {
+                        if (hours == 24) {
+                            hours = 0;
+                        }
+                    }
+                }
             }
             if (hours == 0 && minutes == 0 && seconds == 0) {
                 System.out.println(String.format("В г. %s сейчас полночь!", cityName));
