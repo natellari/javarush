@@ -39,12 +39,10 @@ public class Solution {
 
         public void printCountdown() throws InterruptedException {
             //add your code here - добавь код тут
-            for (int i = countFrom; i > 0; i--){
                 countFrom--;
                 System.out.println(list.get(countFrom));
                 Thread.sleep(500);
             }
 
-        }
     }
 }
