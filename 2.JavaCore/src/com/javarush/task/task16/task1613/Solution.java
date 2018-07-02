@@ -47,7 +47,7 @@ public class Solution {
                 if (minutes == 60)
                 {
                     minutes = 0;
-                    hours = hours++;
+                    hours++;
                     {
                         if (hours == 24) {
                             hours = 0;
