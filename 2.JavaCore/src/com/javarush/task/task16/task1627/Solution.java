@@ -58,17 +58,14 @@ public class Solution {
                         {
                             OnlineGame.isWinnerFound = true;
                             System.out.println(Thread.currentThread().getName() + ":победитель!");
-                        }
-                        else
-                        {
-                            System.out.println(Thread.currentThread().getName() + ":проиграл");
+                            //Thread.currentThread().join();
                         }
                     }
                     Thread.sleep(1000 / rating);
 
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println(Thread.currentThread().getName() + ":проиграл");
             }
         }
     }
