@@ -54,12 +54,13 @@ public class Solution {
                 for (String l : OnlineGame.steps) {
                     System.out.println(Thread.currentThread().getName() + ":" + l);
                     if (l.equals("Убийство врагов")) {
-                        if (OnlineGame.isWinnerFound == false)
-                        {
-                            OnlineGame.isWinnerFound = true;
+                        if (OnlineGame.isWinnerFound == false) {
                             System.out.println(Thread.currentThread().getName() + ":победитель!");
-                            //Thread.currentThread().join();
-                        }
+                            OnlineGame.isWinnerFound = true;
+                            break;
+                        }/* else {
+                            System.out.println(Thread.currentThread().getName() + ":проиграл");
+                        }*/
                     }
                     Thread.sleep(1000 / rating);
 
