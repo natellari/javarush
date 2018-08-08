@@ -52,21 +52,20 @@ public class Solution {
 
             try {
                 for (String l : OnlineGame.steps) {
-                    System.out.println(Thread.currentThread().getName() + ":" + l);
-                    if (l.equals("Убийство врагов")) {
-                        if (OnlineGame.isWinnerFound == false) {
-                            System.out.println(Thread.currentThread().getName() + ":победитель!");
-                            OnlineGame.isWinnerFound = true;
-                            break;
-                        }/* else {
-                            System.out.println(Thread.currentThread().getName() + ":проиграл");
-                        }*/
-                    }
+                    System.out.println(getName() + ":" + l);
+                    //System.out.println("1");
                     Thread.sleep(1000 / rating);
-
                 }
+                if (!OnlineGame.isWinnerFound) {
+                    System.out.println(getName() + ":победитель!");
+                }
+                OnlineGame.isWinnerFound = true;
+
+
+
+
             } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName() + ":проиграл");
+                System.out.println(getName() + ":проиграл");
             }
         }
     }
