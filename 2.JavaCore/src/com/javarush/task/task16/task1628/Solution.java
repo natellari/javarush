@@ -35,7 +35,6 @@ public class Solution {
         System.out.println("#2:" + consolReader2);
         System.out.println("#3:" + consolReader3);
 
-
         reader.close();
     }
 
@@ -45,11 +44,19 @@ public class Solution {
         public void run() {
             //add your code here - добавьте код тут
             try {
-                result.add(reader.readLine());
-                countReadStrings.incrementAndGet();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+                while (!isInterrupted()) {
+                    if (reader.ready()) {
+                        synchronized (countReadStrings) {
+                            if (reader.ready()) {
+                                String line = reader.readLine();
+                                result.add(line);
+                                countReadStrings.incrementAndGet();
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("I am done. Bye bye");
             }
         }
 
