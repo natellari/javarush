@@ -2,10 +2,7 @@ package com.javarush.task.task16.task1630;
 
 import com.sun.org.apache.xpath.internal.SourceTree;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,12 +23,12 @@ public class Solution {
 
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         systemOutPrintln(firstFileName);
         systemOutPrintln(secondFileName);
     }
 
-    public static void systemOutPrintln(String fileName) throws InterruptedException {
+    public static void systemOutPrintln(String fileName) throws InterruptedException, IOException {
         ReadFileInterface f = new ReadFileThread();
         f.setFileName(fileName);
         f.start();
@@ -41,7 +38,7 @@ public class Solution {
         System.out.println(f.getFileContent());
     }
 
-    public interface ReadFileInterface{
+    public interface ReadFileInterface {
 
         void setFileName(String fullFileName);
 
@@ -55,6 +52,7 @@ public class Solution {
     //add your code here - добавьте код тут
     public static class ReadFileThread extends Thread implements ReadFileInterface {
         String fileName = "";
+        boolean first = false;
 
         @Override
         public void setFileName(String fullFileName) {
@@ -63,8 +61,17 @@ public class Solution {
 
         @Override
         public String getFileContent() throws IOException {
-            Files.lines(Paths.get(fileName), StandardCharsets.UTF_8).forEach(name);
-            return null;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
+            String line, s = "";
+            while ((line = reader.readLine()) != null) {
+                if (first == true) {
+                    s = s.concat(" ");
+                }
+                s = s.concat(line);
+                first = true;
+            }
+            return s;
+
         }
 
 
