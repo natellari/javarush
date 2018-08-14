@@ -53,6 +53,25 @@ public class Solution {
     public static class ReadFileThread extends Thread implements ReadFileInterface {
         String fileName = "";
         boolean first = false;
+        String fileContent = "";
+
+        public void run() {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (first == true) {
+                        this.fileContent = fileContent.concat(" ");
+                    }
+                    this.fileContent = fileContent.concat(line);
+                    first = true;
+                }
+                reader.close();
+                //System.out.println(this.fileContent);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         @Override
         public void setFileName(String fullFileName) {
@@ -60,24 +79,14 @@ public class Solution {
         }
 
         @Override
-        public String getFileContent() throws IOException {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
-            String line, s = "";
-            while ((line = reader.readLine()) != null) {
-                if (first == true) {
-                    s = s.concat(" ");
-                }
-                s = s.concat(line);
-                first = true;
-            }
-            return s;
-
+        public String getFileContent() {
+            return this.fileContent;
         }
-
 
         @Override
         public void start() {
-
+            run();
         }
+
     }
 }
