@@ -22,38 +22,46 @@ public class Solution {
     }
 
     public static void main(String[] args) {
+
         switch (args[0]) {
             case ("-c"):
-                createPeople(args);
-                break;
+                synchronized (allPeople) {
+                    createPeople(args);
+                    break;
+                }
             case ("-u"):
-                updatePeople(args);
-                break;
+                synchronized (allPeople) {
+                    updatePeople(args);
+                    break;
+                }
             case ("-d"):
-                deletePeople(args);
-                break;
+                synchronized (allPeople) {
+                    deletePeople(args);
+                    break;
+                }
             case ("-i"):
-                infoPeople(args);
-                break;
+                synchronized (allPeople) {
+                    infoPeople(args);
+                    break;
+                }
             default:
                 System.out.println("fail");
+
         }
     }
 
 
-    public static void createPeople(String[] args) {
+    private synchronized static void createPeople(String[] args) {
         if (((args.length - 1) % 3) == 0) {
-            int count_create = (args.length -1) / 3;
-            int iter = 0;
-            int i =1;
-            while (iter < count_create) {
-                if (args[i+1].equals("м")) {
-                    allPeople.add(Person.createMale(args[i], dateFormat(args[i+2])));
-                } else if (args[i+1].equals("ж")) {
-                    allPeople.add(Person.createFemale(args[i], dateFormat(args[i+2])));
+            int count_create = (args.length - 1) / 3;
+            int i = 1;
+            for (int iter = 0; iter < count_create; iter++) {
+                if (args[i + 1].equals("м")) {
+                    allPeople.add(Person.createMale(args[i], dateFormat(args[i + 2])));
+                } else if (args[i + 1].equals("ж")) {
+                    allPeople.add(Person.createFemale(args[i], dateFormat(args[i + 2])));
                 }
                 i = i + 3;
-                iter++;
                 System.out.println(allPeople.size() - 1);
             }
 
@@ -62,12 +70,11 @@ public class Solution {
         }
     }
 
-    public static void updatePeople(String[] args) {
+    private synchronized static void updatePeople(String[] args) {
         if (((args.length - 1) % 4) == 0) {
             int count_update = (args.length - 1) / 4;
-            int iter = 0;
             int i = 1;
-            while (iter < count_update) {
+            for (int iter = 0; iter < count_update; iter++) {
                 //System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex() + " " + dateFormat(allPeople.get(Integer.parseInt(args[i])).getBirthDay()));
                 if (args[i + 2].equals("м")) {
                     allPeople.get(Integer.parseInt(args[i])).setSex(Sex.MALE);
@@ -80,7 +87,6 @@ public class Solution {
                 allPeople.get(Integer.parseInt(args[i])).setBirthDay(dateFormat(args[i + 3]));
                 //System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex() + " " + dateFormat(allPeople.get(Integer.parseInt(args[i])).getBirthDay()));
                 i = i + 4;
-                iter++;
             }
 
         } else {
@@ -88,12 +94,15 @@ public class Solution {
         }
     }
 
-    public static void deletePeople(String[] args) {
+    private synchronized static void deletePeople(String[] args) {
         if (args.length >= 2) {
-            for (int i = 1; i < args.length - 1; i++) {
+
+            for (int i = 1; i < args.length; i++) {
+                System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex() + " " + dateFormat(allPeople.get(Integer.parseInt(args[i])).getBirthDay()));
                 allPeople.get(Integer.parseInt(args[i])).setName(null);
                 allPeople.get(Integer.parseInt(args[i])).setSex(null);
                 allPeople.get(Integer.parseInt(args[i])).setBirthDay(null);
+                System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex());
             }
 
         } else {
@@ -101,10 +110,10 @@ public class Solution {
         }
     }
 
-    public static void infoPeople(String[] args) {
+    private synchronized static void infoPeople(String[] args) {
         String male;
         if (args.length >= 2) {
-            for (int i = 1; i <= args.length - 1; i++) {
+            for (int i = 1; i < args.length; i++) {
                 Date bd = allPeople.get(Integer.parseInt(args[i])).getBirthDay();
                 if (allPeople.get(Integer.parseInt(args[i])).getSex().equals(Sex.MALE)) {
                     male = "м";
