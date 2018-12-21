@@ -2,6 +2,7 @@ package com.javarush.task.task17.task1711;
 
 import com.javarush.task.task17.task1710.*;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,125 +23,99 @@ public class Solution {
     }
 
     public static void main(String[] args) {
+        //start here - начни тут
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+        DateFormat dateFormatPrt = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
 
         switch (args[0]) {
-            case ("-c"):
-                synchronized (allPeople) {
-                    createPeople(args);
-                    break;
-                }
-            case ("-u"):
-                synchronized (allPeople) {
-                    updatePeople(args);
-                    break;
-                }
-            case ("-d"):
-                synchronized (allPeople) {
-                    deletePeople(args);
-                    break;
-                }
-            case ("-i"):
-                synchronized (allPeople) {
-                    infoPeople(args);
-                    break;
-                }
-            default:
-                System.out.println("fail");
 
-        }
-    }
+            //create person
+            case "-c":
+                for (int step = 1; step < args.length; step += 3) {
+                    Date date = null;
+                    try {
+                        date = dateFormat.parse(args[step + 2]);
+                    } catch (ParseException e) {
+                        e.getMessage();
+                    }
 
+                    //VALIDATOR: При запуске программы с параметром -с программа должна добавлять человека с заданными
+                    // параметрами в конец списка allPeople, и выводить id (index) на экран.
+                    Person person;
+                    if (args[step + 1].startsWith("м"))
+                        person = Person.createMale(args[step], date);
+                    else
+                        person = Person.createFemale(args[step], date);
 
-    private synchronized static void createPeople(String[] args) {
-        if (((args.length - 1) % 3) == 0) {
-            int count_create = (args.length - 1) / 3;
-            int i = 1;
-            for (int iter = 0; iter < count_create; iter++) {
-                if (args[i + 1].equals("м")) {
-                    allPeople.add(Person.createMale(args[i], dateFormat(args[i + 2])));
-                } else if (args[i + 1].equals("ж")) {
-                    allPeople.add(Person.createFemale(args[i], dateFormat(args[i + 2])));
+                    synchronized (allPeople) {
+                        allPeople.add(person);
+                    }
+
+                    System.out.println(allPeople.indexOf(person));
                 }
-                i = i + 3;
-                System.out.println(allPeople.size() - 1);
+                break;
+
+            //update person
+            case "-u": {
+                synchronized (allPeople) {
+                    for (int step = 1; step < args.length; step += 4) {
+                        int index = Integer.parseInt(args[step]);
+                        Person person = allPeople.get(index);
+
+                        //update name
+                        person.setName(args[step + 1]);
+
+                        //udate date
+                        Date date = null;
+                        try {
+                            date = dateFormat.parse(args[step + 3]);
+                        } catch (ParseException e) {
+                            e.getMessage();
+                        }
+                        person.setBirthDay(date);
+
+                        //update sex
+                        if (args[step + 2].startsWith("м"))
+                            person.setSex(Sex.MALE);
+                        else
+                            person.setSex(Sex.FEMALE);
+                    }
+                } //synchronized
+                break;
             }
 
-        } else {
-            System.out.println("no create");
-        }
-    }
+            //remove person
+            case "-d": {
+                synchronized (allPeople) {
+                    for (int i = 1; i < args.length; i++) {
+                        int index = Integer.parseInt(args[i]);
+                        Person person = allPeople.get(index);
 
-    private synchronized static void updatePeople(String[] args) {
-        if (((args.length - 1) % 4) == 0) {
-            int count_update = (args.length - 1) / 4;
-            int i = 1;
-            for (int iter = 0; iter < count_update; iter++) {
-                //System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex() + " " + dateFormat(allPeople.get(Integer.parseInt(args[i])).getBirthDay()));
-                if (args[i + 2].equals("м")) {
-                    allPeople.get(Integer.parseInt(args[i])).setSex(Sex.MALE);
-                } else if (args[i + 2].equals("ж")) {
-                    allPeople.get(Integer.parseInt(args[i])).setSex(Sex.FEMALE);
-                } else {
-                    System.out.println("wrong sex");
+                        person.setName(null);
+                        person.setSex(null);
+                        person.setBirthDay(null);
+                    }
                 }
-                allPeople.get(Integer.parseInt(args[i])).setName(args[i + 1]);
-                allPeople.get(Integer.parseInt(args[i])).setBirthDay(dateFormat(args[i + 3]));
-                //System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex() + " " + dateFormat(allPeople.get(Integer.parseInt(args[i])).getBirthDay()));
-                i = i + 4;
+                break;
             }
 
-        } else {
-            System.out.println("no update");
-        }
-    }
-
-    private synchronized static void deletePeople(String[] args) {
-        if (args.length >= 2) {
-
-            for (int i = 1; i < args.length; i++) {
-                System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex() + " " + dateFormat(allPeople.get(Integer.parseInt(args[i])).getBirthDay()));
-                allPeople.get(Integer.parseInt(args[i])).setName(null);
-                allPeople.get(Integer.parseInt(args[i])).setSex(null);
-                allPeople.get(Integer.parseInt(args[i])).setBirthDay(null);
-                System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + allPeople.get(Integer.parseInt(args[i])).getSex());
-            }
-
-        } else {
-            System.out.println("no delete");
-        }
-    }
-
-    private synchronized static void infoPeople(String[] args) {
-        String male;
-        if (args.length >= 2) {
-            for (int i = 1; i < args.length; i++) {
-                Date bd = allPeople.get(Integer.parseInt(args[i])).getBirthDay();
-                if (allPeople.get(Integer.parseInt(args[i])).getSex().equals(Sex.MALE)) {
-                    male = "м";
-                } else {
-                    male = "ж";
+            //print person
+            case "-i": {
+                synchronized (allPeople) {
+                    for (int i = 1; i < args.length; i++) {
+                        int index = Integer.parseInt(args[i]);
+                        Person person = allPeople.get(index);
+                        StringBuffer s = new StringBuffer();
+                        s.append(person.getName());
+                        s.append(" ");
+                        s.append(person.getSex() == Sex.MALE ? "м" : "ж");
+                        s.append(" ");
+                        s.append(dateFormatPrt.format(person.getBirthDay()));
+                        System.out.println(s);
+                    }
                 }
-                System.out.println(allPeople.get(Integer.parseInt(args[i])).getName() + " " + male + " " + dateFormat(bd));
             }
-        } else {
-            System.out.println("no info");
+            break;
         }
-    }
-
-    public static String dateFormat(Date date) {
-        String strDateFormat = "dd-MMM-yyyy";
-        SimpleDateFormat date1 = new SimpleDateFormat(strDateFormat, Locale.ENGLISH);
-        return date1.format(date);
-    }
-
-    private static Date dateFormat(String date) {
-        SimpleDateFormat dateSimple = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-        Date doc = null;
-        try {
-            doc = dateSimple.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return doc;
     }
 }
